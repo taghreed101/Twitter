@@ -12,13 +12,79 @@
                     <p class="card-text"><%=tweet.text%></p>
                     <hr>
                     <div class="tweet-actions" style="text-align:center;">
-                        <button type="submit" value="reply" class="btn"><a href="#" class="card-link"> <i class="far fa-comment-dots">1</i></a></button>
-                        <button type="submit" value="reply" class="btn"><a href="#" class="card-link"> <i class="fas fa-retweet">1</i></a></button>
-                        <button type="submit" value="reply" class="btn"><a href="#" class="card-link"> <i class="fas fa-heart">1</i></a></button>
-                
+                        <!-- Button trigger reply modal -->
+                        <button  class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+                        
+                             <a href="#" class="card-link"><i class="far fa-comment-dots"><%=tweet.replies.count%></i></a>
+                       
+                         </button>
+
+                    <!-- Reply Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Reply to <%=@other_user.name%></h5>
+                            <button class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form  action="/reply" method="POST" class="modal-body" >
+                            <div class="form-group">
+                             <input type="hidden" name="tweet_id" value="<%=tweet.id%>">
+                                <label for="comment">Replying to <%=@other_user.nickname%>  </label>
+                                    <textarea name = "tweet_text" class="form-control" rows="3" id="comment" placeholder="Tweet your reply"></textarea>
+                            </div>
+                       
+                        <div class="modal-footer">
+                            <button type="submit" value="reply" class="btn btn-primary">Reply</button>
+                        </div>
+                        </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                    </div>
+
+                        <!-- Button trigger Retweet modal -->
+                        <button class="btn" data-toggle="modal" data-target="#retweet">
+                       
+                             <a href="#" class="card-link"><%=tweet.retweets.count%><i class="fas fa-retweet"></i></a>
+                       
+                        </button>
+
+                            <!-- Retweet Modal -->
+                    <div class="modal fade" id="retweet" tabindex="-1" role="dialog" aria-labelledby="retweetTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Retweet this to your followers?</h5>
+                            <button class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form  action="/retweet" method="POST" class="modal-body" >
+                            <div class="form-group">
+                            <input type="hidden" name="tweet_id" value="<%=tweet.id%>" >
+                             <textarea name = "tweet_text" class="form-control" rows="1" id="comment" placeholder="Tweet your reply"></textarea>
+                            </div>
+                        
+                        <div class="modal-footer">
+                           <button  type="submit" value="retweet" class="btn btn-primary">Retweet</button>
+                        </div>
+                        </form>
+                        </div>
+                                                    
+                    </div>
+                    
+                    </div>
+                    <button type="submit" name = "tweet_id" value="like" class="btn"><a href="/like/<%=tweet.id%>" class="card-link"> <i class="fas fa-heart"><%=tweet.liked_count%></i></a></button>      
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
         <% end %>
+    
+
+        </div>
+       
         

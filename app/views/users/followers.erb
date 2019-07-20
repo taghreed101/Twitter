@@ -1,0 +1,24 @@
+
+
+<div class="followers">
+    <div class="col right-col">
+            <div class="card shadow-sm" style="">
+                <div class="card-body" style="width:100%;">
+                <div class="WhoToFollow">
+                    <h3>Who Are Followers</h3>
+                <div>
+                
+                   <% @followers.each do |user| %>
+
+                       <div>
+                           <%= user.name.capitalize%>|<%= user.nickname.capitalize %>
+                           <br>
+          <!--       <a href="/follower/<%=user.id%>"><button style="width:30%;" type="submit" value="follow_id" class="button">Follow</button></a> -->
+                           <hr>
+                       </div>
+                   <% end %>
+
+                  
+                   </div>
+          </div>
+</div>

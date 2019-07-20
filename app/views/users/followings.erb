@@ -1,0 +1,23 @@
+
+<div class="followings">
+      
+   <div class="col right-col">
+            <div class="card shadow-sm" style="">
+                <div class="card-body" style="width:100%;">
+                <div class="WhoToFollow">
+                    <h3>Who Are Followings</h3>
+                <div>
+                
+                   <% @followings.each do |user| %>
+
+                       <div>
+                           <%= user.name.capitalize%>|<%= user.nickname.capitalize %>
+                           <br>
+                          <hr>
+                       </div>
+                   <% end %>
+
+                  
+                   </div>
+          </div>
+</div>

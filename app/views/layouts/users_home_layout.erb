@@ -11,7 +11,9 @@
 </head>
 <body>
      <%# NAVBAR  %>
+     
         <div class="topnav shadow-sm"> 
+        <%if  session[:user_id] == @user.id %>
             <a href="/users/home">HOME</a>
             <div id="profile"><a href='/sessions/logout'>SIGNOUT</a></div>
             <div id="profile"><a href='/users/profile'><%=@user.name%></a></div>
@@ -19,8 +21,12 @@
                 <%# <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> %>
             <%# </div> %>
-        </div>
+        <%else   %>
+           <a href="/following/<%=@user.id%>"><button style="width:100%;" type="submit" value="follow_id" class="button">Following</button></a>
+             <% end %>
 
+        </div>
+    
     <div class="container">
         <div class="row">
 
@@ -28,24 +34,24 @@
                  <%# ProfileCard  %>
                 <div class="card shadow-sm" style="">
                 <div class="card-body" style="width:100%;">
-                        <h5 class="card-title"><a href="/ tweet.user_id.user_name "> <%=@user.name.upcase%></a></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><a href="/ tweet.user_id.user_name "></a>@<%=@user.nickname%></a></h6>
+                        <h5 class="card-title mb-2 text-muted"><a href="#"> <%=@user.name.upcase%></a></h5>
+                        <h6 class="card-subtitle "><a href="/<%=@user.nickname%>"><%=@user.nickname%></a></h6>
                     
                     <div style="text-align:center;" >
                         <div class="ProfileCard-status">
-                            <a href="#">tweets</a>
+                            <a href="/users/tweets">tweets</a>
                             <br>
-                            <a href="#"><%=@user.tweets.count%></a>
+                            <%=@user.tweets.count%>
                         </div>
                         <div class="ProfileCard-status">
-                            <a href="#">followers</a>
+                            <a href="/users/followers">followers</a>
                             <br>
-                            <a href="#"><%=@num_followers%></a>
+                          <%=@user.followers.count%>
                         </div>
                         <div class="ProfileCard-status">
-                            <a href="#">following</a>
+                            <a href="/users/followings">following</a>
                             <br>
-                            <a href="#"><%=@num_followings%></a>
+                          <%=@user.followings.count%>
                         </div>
                     </div>
 
@@ -68,18 +74,18 @@
                 <div class="WhoToFollow">
                     <h3>Who To Follow</h3>
                 <div>
-                <%if @random_users %>
-                   <% @random_users.each do |user| %>
+                
+                   <% @who_to_follow.each do |user| %>
 
                        <div>
                            <%= user.name.capitalize%>|<%= user.nickname.capitalize %>
                            <br>
-                           <button style=“width:30%;” type=“button” class=“button”>Follow</button>
+                  <a href="/follower/<%=user.id%>"><button style="width:30%;" type="submit" value="follow_id" class="button">Follow</button></a>
                            <hr>
                        </div>
                    <% end %>
 
-                   <% end %>
+                  
                    </div>
                 </div>
 

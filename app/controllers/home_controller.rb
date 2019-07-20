@@ -1,8 +1,10 @@
+require "byebug"
+
 class HomeController  < Sinatra::Base
 
 
    configure do
-       set :views, "app/views"
+   set :views, "app/views"
    set :public_dir, "public"
    end
    register Sinatra::ActiveRecordExtension
@@ -10,36 +12,18 @@ class HomeController  < Sinatra::Base
 
  get '/users/home' do
     if session[:user_id] == nil
-        redirect ‘/sessions/login’
+        redirect '/sessions/login'
       else
-        #we need to have followers first. none was created
-        if Follower.count == 0
-        @followers=Follower.where(user_id: session[:user_id]).order(id: :desc)
-        @num_followers = Follower.where(user_id: session[:user_id]).count
-        @num_followings = Follower.where(follower_id: session[:user_id]).count
-
-        # byebug
+       
         @user = User.find(session[:user_id])
-        @tweets = @user.tweets.reverse
-        @random_users = []
-        if User.count>3
-            3.times do
-                x = User.find(rand(User.count) + 1)
-                while x == @user || @random_users.include?(x)
-                    x = User.find(rand(User.count) + 1)
-                end
-                (@random_users << x)
-            end
-        else
-            (User.count - 1).times do
-                x = User.find(rand(User.count) + 1)
-                while x == @user || @random_users.include?(x)
-                    x = User.find(rand(User.count) + 1)
-                end
-                (@random_users << x)
-        #    @random_users = User.all.sample(3)
-            end
-        end
+        @tweets = @user.tweets.last(4)
+        followings_id = @user.followings.pluck(:follower_id)
+        @followings = User.all.where('id  IN (?)',followings_id)
+    #===================================================================    
+        except_users = @user.followings.pluck(:follower_id).push(@user.id)
+        @who_to_follow = User.all.where('id NOT IN (?)',except_users)
+        @who_to_follow = @who_to_follow.sample(3)
+        
         erb :'/users/user_home', layout: :'/layouts/users_home_layout'
 
     end
@@ -47,21 +31,18 @@ class HomeController  < Sinatra::Base
 end
 
 
-end
+
 #Tagreed 
 get '/:nickname' do
 @other_user = User.find_by(nickname:params["nickname"])
-if  session[:user_id].nil?
-    @user=@other_user
-else
-   @user = User.find(session[:user_id])
-end
-    unless @other_user.nil?
-   
-    byebug
-   
-    @other_tweets =  @other_user.tweets
-    erb :'/users/profile_home', layout: :'/layouts/users_home_layout'
+@user=@other_user
+#byebug
+   unless @other_user.nil?
+   @other_tweets =  @other_user.tweets.last(4)
+   except_users = @user.followings.pluck(:follower_id).push(@user.id)
+   @who_to_follow = User.all.where('id NOT IN (?)',except_users)
+   @who_to_follow = @who_to_follow.sample(3)
+   erb :'/users/profile_home', layout: :'/layouts/users_home_layout'
   else
     raise Sinatra::NotFound
   end
@@ -74,11 +55,24 @@ post '/tweet' do
        redirect '/users/home'
 end
 
-get '/users/:id' do
-     @other_user = User.find(params[:id])
-     @tweets = @other_user.tweets.reverse
-      erb :'/users/profile_home', layout: :'/layouts/users_home_layout'
-      
-  end
+ get '/follower/:id' do
+    @user = User.find(session[:user_id])
+   
+   Follower.create(user_id:@user.id ,follower_id: params["id"])
+ 
+  redirect   'users/home' 
+
+ end
+
+ get '/following/:id' do
+  @user = User.find(session[:user_id])
+  following= @user.followings.find_by(follower_id: params[:id])
+  
+  following.destroy
+  redirect "/users/home"
+end
+
+
+ 
 
 end

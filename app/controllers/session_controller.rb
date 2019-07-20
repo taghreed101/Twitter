@@ -45,10 +45,11 @@ end
   # Handles the POST request when user submites the Log In form. Similar to above, but without the new user creation.
   post '/sessions' do
     user = User.find_by(email: params["email"])
-    if user.password == params["password"]
+    if user && user.password == params["password"]
       session[:user_id] = user.id
       redirect '/users/home'
     else 
+      
       redirect '/sessions/login'
     end
   end

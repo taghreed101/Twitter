@@ -1,0 +1,24 @@
+
+
+
+<div class="col right-col">
+<div class="tweets">
+        <%# one tweet %>
+        <%@tweets.each do |tweet| %>
+
+        <div class="tweet">
+            <div class="card shadow-sm" style="">
+                <div class="card-body" style="width:100%;">
+                    <h5 class="card-title"><a href="#"><%=@user.name%> </a></h5>
+                    <h6 class="card-subtitle "><a href="/<%=@user.nickname%>"><%=@user.nickname%></a></h6>
+                    <p class="card-text"><%=tweet.text%></p>
+                    <hr>
+                   
+                                    </div>
+                                </div>
+                            </div>
+                        
+        <% end %>
+    
+</div>
+</div>
