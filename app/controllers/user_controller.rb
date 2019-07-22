@@ -9,15 +9,15 @@ class UserController  < Sinatra::Base
    end
    register Sinatra::ActiveRecordExtension
 
-   get '/users/tweets' do
-    @user = User.find(session[:user_id])
+   get '/users/tweets/:id' do
+    @user = User.find(params["id"])
     @tweets = @user.tweets
     erb :'users/tweets' 
 
  end
 
- get '/users/followers' do
-    @user = User.find(session[:user_id])
+ get '/users/followers/:id' do
+    @user = User.find(params["id"])
     followers_id = @user.followers.pluck(:user_id)
     @followers = User.all.where('id  IN (?)',followers_id)
   
@@ -25,8 +25,8 @@ class UserController  < Sinatra::Base
 
  end
 
- get '/users/followings' do
-    @user = User.find(session[:user_id])
+ get '/users/followings/:id' do
+    @user = User.find(params["id"])
     followings_id = @user.followings.pluck(:follower_id)
     @followings = User.all.where('id  IN (?)',followings_id)
     

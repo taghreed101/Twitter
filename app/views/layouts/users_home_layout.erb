@@ -39,17 +39,17 @@
                     
                     <div style="text-align:center;" >
                         <div class="ProfileCard-status">
-                            <a href="/users/tweets">tweets</a>
+                            <a href="/users/tweets/<%=@user.id%>">tweets</a>
                             <br>
                             <%=@user.tweets.count%>
                         </div>
                         <div class="ProfileCard-status">
-                            <a href="/users/followers">followers</a>
+                            <a href="/users/followers/<%=@user.id%>">followers</a>
                             <br>
                           <%=@user.followers.count%>
                         </div>
                         <div class="ProfileCard-status">
-                            <a href="/users/followings">following</a>
+                            <a href="/users/followings/<%=@user.id%>">following</a>
                             <br>
                           <%=@user.followings.count%>
                         </div>
